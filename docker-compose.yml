@@ -10,6 +10,30 @@ services:
       - '5432:5432'
     volumes: 
       - db:/var/lib/postgresql/data
+  backend:
+    image: backend
+    environment:
+      - POSTGRES_USER=truequeando_db
+      - POSTGRES_PASSWORD=dbp4assw0rd
+    build:
+      context: ./truequeandoback
+      dockerfile: Dockerfile
+    depends_on:
+      - postgresql
+    ports:
+      - '8000:8080'
+  frontend:
+    image: frontend
+    build:
+      context: ./truequeandofront
+      dockerfile: Dockerfile
+    depends_on:
+      - postgresql
+      - backend
+    ports:
+      - '80:80'
+    
+
 volumes:
   db:
     driver: local
